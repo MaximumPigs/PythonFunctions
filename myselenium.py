@@ -26,30 +26,30 @@ def driver_quit(driver):
 
 # Find elements
 
-def driver_get_element_by_class(driver, class_):
-    return driver.find_element(By.CLASS_NAME, value=class_)
+def driver_get_element(driver, by, value):
 
-def driver_get_elements_by_class(driver, class_):
-    return driver.find_elements(By.CLASS_NAME, value=class_)
+    def class_(driver, class_):
+        return driver.find_element(By.CLASS_NAME, value=class_)
 
-def driver_get_element_by_name(driver, name):
-    return driver.find_element(By.NAME, value=name)
+    def name(driver, name):
+        return driver.find_element(By.NAME, value=name)
 
-def driver_get_element_by_tag(driver, tag):
-    return driver.find_element(By.TAG_NAME, value=tag)
+    def tag(driver, tag):
+        return driver.find_element(By.TAG_NAME, value=tag)
 
-def driver_get_element_by_id(driver, id):
-    return driver.find_element(By.ID, value=id)
+    def id(driver, id):
+        return driver.find_element(By.ID, value=id)
 
-def driver_get_element_by_css_selector(driver, selector):
-    return driver.find_element(By.CSS_SELECTOR, value=selector)
+    def css_selector(driver, selector):
+        return driver.find_element(By.CSS_SELECTOR, value=selector)
 
-
+    def link_text(driver, link):
+        return driver.find_element(By.LINK_TEXT, value=link)
+    
+    return by(driver, value)
+    
 def driver_get_element_by_xpath(driver, tag, attribute, value):
     return driver.find_element(By.XPATH, value=f"//{ tag }[{ attribute }='{ value }']")
-
-def driver_get_element_by_link_text(driver, link):
-    return driver.find_element(By.LINK_TEXT, value=link)
 
 # Interact with elements
 
