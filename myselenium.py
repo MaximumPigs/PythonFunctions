@@ -70,3 +70,4 @@ def element_send_keys(element, keys):
 
 def element_send_enter(element):
     element.send_keys(Keys.ENTER)
+    

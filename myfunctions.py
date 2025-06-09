@@ -1,5 +1,5 @@
 # Return a Prefix Sum List of an input List
-def runningSum(self, nums: List[int]) -> List[int]:
+def runningSum(self, nums: list[int]) -> list[int]:
     num_sum = 0
     out = []
     for num in nums:
