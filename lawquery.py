@@ -99,10 +99,10 @@ test = '''{
         [
           "b438b4f6-912a-46d5-9cb1-b44069212abc",
           "ContosoSQLSrv1",
-          "2017-08-24T06:59:59Z",
+          "2017-08-24T06:59:59.0000000Z",
           "OMS",
-          "2017-08-24T06:00:00Z",
-          "2017-08-24T06:59:59Z",
+          "2017-08-24T06:00:00.0000000Z",
+          "2017-08-24T06:59:59.0000000Z",
           "/subscriptions/e4272367-5645-4c4e-9c67-3b74b59a6982/resourcegroups/contosoazurehq/providers/microsoft.operationalinsights/workspaces/contosoretail-it",
           null,
           "Perf",
@@ -122,10 +122,10 @@ test = '''{
         [
           "b438b4f6-912a-46d5-9cb1-b44069212abc",
           "Store010Web3",
-          "2017-08-24T06:59:59Z",
+          "2017-08-24T06:59:59.0000000Z",
           "OMS",
-          "2017-08-24T06:00:00Z",
-          "2017-08-24T06:59:59Z",
+          "2017-08-24T06:00:00.0000000Z",
+          "2017-08-24T06:59:59.0000000Z",
           "/subscriptions/e4272367-5645-4c4e-9c67-3b74b59a6982/resourcegroups/contosoazurehq/providers/microsoft.operationalinsights/workspaces/contosoretail-it",
           null,
           "Perf",
@@ -160,7 +160,9 @@ class LawTable():
                 val_type = self.fields[i]['type']
                 event[name] = self.make_type(val_type, row[i])
                 if name == "TimeGenerated":
-                    _time = floor(datetime.datetime.strptime(row[i], "%Y-%m-%dT%H:%M:%SZ").timestamp())
+                    print(row[i])
+                    _time = floor(datetime.datetime.strptime(row[i][:26], "%Y-%m-%dT%H:%M:%S.%f").timestamp())
+                    print(_time)
             event['_raw'] = json.dumps(event, indent=2)
             # This is out here because I don't want _time to appear in _raw
             if _time:
@@ -243,14 +245,14 @@ class LawWorkspace():
 if __name__ == '__main__':
     tenant = os.environ.get('tenant_id')
     workspace = os.environ.get('workspace_id')
-    id = os.environ.get('client_id')
+    client = os.environ.get('client_id')
     secret = os.environ.get('client_secret')
-    law = LawWorkspace(tenant, id, secret, workspace)
+    law = LawWorkspace(tenant, client, secret, workspace)
 
-    results = law.run_kql_query("AuditLogs")
+    results = law.run_kql_query("""MicrosoftGraphActivityLogs | extend test=dynamic('[{"test": "something"}, {"anothertest": [1, 2, 3]}]')""")
     for event in results.yield_events():
         print(json.dumps(event, indent=2))
 
-    test = LawTable(json.loads(test))
-    for event in test.yield_events():
-        print(json.dumps(event, indent=2))
+    # test = LawTable(json.loads(test))
+    # for event in test.yield_events():
+    #     print(json.dumps(event, indent=2))
